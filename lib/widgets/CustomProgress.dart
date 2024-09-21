@@ -3,6 +3,7 @@ import 'CustomButton.dart';
 import 'CustomCompleted.dart';
 import 'package:untitled/models/CompletedData.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled/models/TaskData.dart';
 
 class CustomProgress extends StatefulWidget {
   final String title;
@@ -157,6 +158,7 @@ class _CustomProgressState extends State<CustomProgress> {
                   CustomCompleted(title: widget.title, body: widget.body, date: widget.date);
 
                   Provider.of<CompletedData>(context, listen: false).addTask(list);
+                  Provider.of<TaskData>(context, listen: false).removeTask(widget.title);
                 },
               ),
               const SizedBox(height: 10),

@@ -14,4 +14,9 @@ class TaskData extends ChangeNotifier {
     _tasks.add(list);
     notifyListeners();
   }
+
+  void removeTask(String title) {
+    _tasks.removeWhere((task) => task.title == title); // Remove by title
+    notifyListeners(); // Notify listeners to update UI
+  }
 }

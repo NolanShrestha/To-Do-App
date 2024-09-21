@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTaskList extends StatelessWidget {
+class CustomTaskList extends StatefulWidget {
   final String title;
   final String body;
   final String date;
@@ -13,6 +13,13 @@ class CustomTaskList extends StatelessWidget {
   });
 
   @override
+  _CustomTaskListState createState() => _CustomTaskListState();
+}
+
+class _CustomTaskListState extends State<CustomTaskList> {
+  double _progress = 0.5; // Default progress value
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -22,8 +29,7 @@ class CustomTaskList extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
-        crossAxisAlignment:
-        CrossAxisAlignment.center, // Center contents horizontally
+        crossAxisAlignment: CrossAxisAlignment.center, // Center contents horizontally
         children: [
           Row(
             children: [
@@ -42,11 +48,10 @@ class CustomTaskList extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: Column(
-                    mainAxisSize:
-                    MainAxisSize.min, // Adjust size to fit content
+                    mainAxisSize: MainAxisSize.min, // Adjust size to fit content
                     children: [
                       Text(
-                        title,
+                        widget.title,
                         style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
@@ -55,7 +60,7 @@ class CustomTaskList extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        body,
+                        widget.body,
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
@@ -73,7 +78,7 @@ class CustomTaskList extends StatelessWidget {
                           ),
                           const SizedBox(width: 5),
                           Text(
-                            date,
+                            widget.date,
                             style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 16,
@@ -81,7 +86,7 @@ class CustomTaskList extends StatelessWidget {
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -89,8 +94,8 @@ class CustomTaskList extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const LinearProgressIndicator(
-            value: 0.5,
+          LinearProgressIndicator(
+            value: _progress,
             backgroundColor: Colors.grey,
             color: Colors.blue,
           ),

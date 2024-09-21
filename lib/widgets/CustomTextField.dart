@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final InputDecoration decoration;
   final IconData prefixIcon; // Renamed from `icons` to `icon` for clarity
   final String hintText;
@@ -15,12 +15,18 @@ class CustomTextField extends StatelessWidget {
   });
 
   @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  @override
   Widget build(BuildContext context) {
     return TextField(
-      decoration: decoration.copyWith(
-        hintText: hintText,
+      controller: widget.controller,
+      decoration: widget.decoration.copyWith(
+        hintText: widget.hintText,
         prefixIcon: Icon(
-          prefixIcon, // Use the provided `icon`
+          widget.prefixIcon, // Use the provided `icon`
           color: Colors.black,
         ),
         border: OutlineInputBorder(
