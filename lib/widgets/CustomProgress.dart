@@ -169,6 +169,16 @@ class _CustomProgressState extends State<CustomProgress> {
                 text: 'Edit Task',
                 onPressed: () {},
               ),
+              const SizedBox(height: 10),
+              CustomButton(
+                backgroundColor: const Color(0xFFDE496E),
+                foregroundColor: Colors.white,
+                color: Colors.white,
+                text: 'Delete Task',
+                onPressed: () {
+                  Provider.of<TaskData>(context, listen: false).removeTask(widget.title);
+                },
+              ),
             ],
           ),
         ],
