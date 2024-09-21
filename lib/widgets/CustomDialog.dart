@@ -5,15 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/models/TaskData.dart';
 
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => TaskData(),
-      child: const CustomDialog(),
-    ),
-  );
-}
-
 class CustomDialog extends StatefulWidget {
   const CustomDialog({super.key});
 

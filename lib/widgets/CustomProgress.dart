@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'CustomButton.dart';
+import 'CustomCompleted.dart';
+import 'package:untitled/models/CompletedData.dart';
+import 'package:provider/provider.dart';
 
 class CustomProgress extends StatefulWidget {
   final String title;
@@ -149,7 +152,12 @@ class _CustomProgressState extends State<CustomProgress> {
                 foregroundColor: Colors.white,
                 color: Colors.white,
                 text: 'Task Completed',
-                onPressed: () {},
+                onPressed: () {
+                  CustomCompleted list =
+                  CustomCompleted(title: widget.title, body: widget.body, date: widget.date);
+
+                  Provider.of<CompletedData>(context, listen: false).addTask(list);
+                },
               ),
               const SizedBox(height: 10),
               CustomButton(

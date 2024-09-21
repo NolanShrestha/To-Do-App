@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/widgets/CustomProgress.dart';
 import 'package:untitled/widgets/CustomAppBar.dart';
+import 'package:untitled/models/TaskData.dart';
+import 'package:provider/provider.dart';
 
 class Screen2 extends StatefulWidget {
   const Screen2({super.key});
@@ -12,6 +14,7 @@ class Screen2 extends StatefulWidget {
 class Screen2State extends State<Screen2> {
   @override
   Widget build(BuildContext context) {
+    var savedTasks = Provider.of<TaskData>(context).savedTasks;
     return Scaffold(
       backgroundColor: const Color(0xFFF6F2FF),
       body: SafeArea(
@@ -71,20 +74,20 @@ class Screen2State extends State<Screen2> {
                   ),
                 ),
                 const SizedBox(height: 14),
-                const CustomProgress(
-                  title: 'Title One',
-                  body: 'Body One',
-                  date: '2024-7-13',
-                ),
-                const CustomProgress(
-                  title: 'Title Two',
-                  body: 'Body Two',
-                  date: '2024-2-1',
-                ),
-                const CustomProgress(
-                  title: 'Title Three',
-                  body: 'Body Three',
-                  date: '2024-9-18',
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final task = savedTasks[index];
+                    return CustomProgress(
+                      title: task.title,
+                      body: task.body,
+                      date: task.date,
+                    );
+                  },
+                  separatorBuilder: (context, index) =>
+                  const SizedBox(height: 10),
+                  itemCount: savedTasks.length,
                 ),
               ],
             ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/widgets/CustomCompleted.dart';
 import 'package:untitled/widgets/CustomAppBar.dart';
+import 'package:untitled/models/CompletedData.dart';
+import 'package:provider/provider.dart';
 
 class Screen3 extends StatefulWidget {
   const Screen3({super.key});
@@ -12,6 +14,7 @@ class Screen3 extends StatefulWidget {
 class Screen3State extends State<Screen3> {
   @override
   Widget build(BuildContext context) {
+    var savedTasks = Provider.of<CompletedData>(context).savedTasks;
     return Scaffold(
       backgroundColor: const Color(0xFFF6F2FF),
       body: SafeArea(
@@ -71,21 +74,36 @@ class Screen3State extends State<Screen3> {
                   ),
                 ),
                 const SizedBox(height: 14),
-                const CustomCompleted(
-                  title: 'Task 1',
-                  body: 'Body 1',
-                  date: '2023-2-17',
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final task = savedTasks[index];
+                    return CustomCompleted(
+                      title: task.title,
+                      body: task.body,
+                      date: task.date,
+                    );
+                  },
+                  separatorBuilder: (context, index) =>
+                  const SizedBox(height: 10),
+                  itemCount: savedTasks.length,
                 ),
-                const CustomCompleted(
-                  title: 'Task 2',
-                  body: 'Body 2',
-                  date: '2024-1-14',
-                ),
-                const CustomCompleted(
-                  title: 'Task 3',
-                  body: 'Body 3',
-                  date: '2023-6-3',
-                ),
+                // const CustomCompleted(
+                //   title: 'Task 1',
+                //   body: 'Body 1',
+                //   date: '2023-2-17',
+                // ),
+                // const CustomCompleted(
+                //   title: 'Task 2',
+                //   body: 'Body 2',
+                //   date: '2024-1-14',
+                // ),
+                // const CustomCompleted(
+                //   title: 'Task 3',
+                //   body: 'Body 3',
+                //   date: '2023-6-3',
+                // ),
               ],
             ),
           ),
