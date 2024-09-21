@@ -3,6 +3,7 @@ import 'package:untitled/widgets/CustomCompleted.dart';
 import 'package:untitled/widgets/CustomAppBar.dart';
 import 'package:untitled/models/CompletedData.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled/models/CompletedData.dart';
 
 class Screen3 extends StatefulWidget {
   const Screen3({super.key});
@@ -12,6 +13,19 @@ class Screen3 extends StatefulWidget {
 }
 
 class Screen3State extends State<Screen3> {
+
+  void sortTasksByDate1() {
+    var taskData = Provider.of<CompletedData>(context, listen: false);
+    taskData.savedTasks.sort((a, b) => b.date.compareTo(a.date));
+    setState(() {});
+  }
+
+  void sortTasksByDate2() {
+    var taskData = Provider.of<CompletedData>(context, listen: false);
+    taskData.savedTasks.sort((a, b) => a.date.compareTo(b.date));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var savedTasks = Provider.of<CompletedData>(context).savedTasks;
@@ -30,8 +44,12 @@ class Screen3State extends State<Screen3> {
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {},
-                  onDoubleTap: () {},
+                  onTap: () {
+                    sortTasksByDate1();
+                  },
+                  onDoubleTap: () {
+                    sortTasksByDate2();
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
@@ -89,21 +107,6 @@ class Screen3State extends State<Screen3> {
                   const SizedBox(height: 10),
                   itemCount: savedTasks.length,
                 ),
-                // const CustomCompleted(
-                //   title: 'Task 1',
-                //   body: 'Body 1',
-                //   date: '2023-2-17',
-                // ),
-                // const CustomCompleted(
-                //   title: 'Task 2',
-                //   body: 'Body 2',
-                //   date: '2024-1-14',
-                // ),
-                // const CustomCompleted(
-                //   title: 'Task 3',
-                //   body: 'Body 3',
-                //   date: '2023-6-3',
-                // ),
               ],
             ),
           ),

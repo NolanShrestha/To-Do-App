@@ -12,6 +12,19 @@ class Screen2 extends StatefulWidget {
 }
 
 class Screen2State extends State<Screen2> {
+
+  void sortTasksByDate1() {
+    var taskData = Provider.of<TaskData>(context, listen: false);
+    taskData.savedTasks.sort((a, b) => b.date.compareTo(a.date));
+    setState(() {});
+  }
+
+  void sortTasksByDate2() {
+    var taskData = Provider.of<TaskData>(context, listen: false);
+    taskData.savedTasks.sort((a, b) => a.date.compareTo(b.date));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var savedTasks = Provider.of<TaskData>(context).savedTasks;
@@ -30,8 +43,12 @@ class Screen2State extends State<Screen2> {
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () {},
-                  onDoubleTap: () {},
+                  onTap: () {
+                    sortTasksByDate1();
+                  },
+                  onDoubleTap: () {
+                    sortTasksByDate2();
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
