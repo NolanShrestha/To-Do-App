@@ -103,7 +103,7 @@ class Screen2State extends State<Screen2> {
                     );
                   },
                   separatorBuilder: (context, index) =>
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 2),
                   itemCount: savedTasks.length,
                 ),
               ],

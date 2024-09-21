@@ -32,9 +32,12 @@ class Screen1 extends StatefulWidget {
 }
 
 class _Screen1State extends State<Screen1> {
+
   @override
   Widget build(BuildContext context) {
     var savedTasks = Provider.of<TaskData>(context).savedTasks;
+    int taskCount = Provider.of<TaskData>(context, listen: false).taskCount;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F2FF),
       body: SafeArea(
@@ -189,8 +192,8 @@ class _Screen1State extends State<Screen1> {
                             color: Colors.blue,
                           ),
                         ),
-                        const Text(
-                          '4',
+                         Text(
+                          '${Provider.of<TaskData>(context).taskCount}',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -215,7 +218,7 @@ class _Screen1State extends State<Screen1> {
                     );
                   },
                   separatorBuilder: (context, index) =>
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 2),
                   itemCount: savedTasks.length,
                 ),
               ],

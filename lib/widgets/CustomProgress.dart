@@ -4,6 +4,7 @@ import 'CustomCompleted.dart';
 import 'package:untitled/models/CompletedData.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/models/TaskData.dart';
+import 'package:untitled/widgets/EditDialog.dart';
 
 class CustomProgress extends StatefulWidget {
   final String title;
@@ -167,7 +168,14 @@ class _CustomProgressState extends State<CustomProgress> {
                 foregroundColor: Colors.white,
                 color: Colors.white,
                 text: 'Edit Task',
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const EditDialog();
+                    },
+                  );
+                },
               ),
               const SizedBox(height: 10),
               CustomButton(

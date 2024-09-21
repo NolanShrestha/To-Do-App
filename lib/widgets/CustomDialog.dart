@@ -44,7 +44,7 @@ class _CustomDialogState extends State<CustomDialog> {
           ),
           SizedBox(width: 10),
           Text(
-            'Add tasks',
+            'Add task',
             style: TextStyle(
               fontSize: 20,
               color: Colors.black,
