@@ -192,7 +192,7 @@ class _Screen1State extends State<Screen1> {
                             color: Colors.blue,
                           ),
                         ),
-                         Text(
+                        Text(
                           '${Provider.of<TaskData>(context).taskCount}',
                           style: TextStyle(
                             color: Colors.white,
