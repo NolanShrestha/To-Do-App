@@ -172,7 +172,7 @@ class _CustomProgressState extends State<CustomProgress> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return const EditDialog();
+                      return EditDialog(oldTitle: widget.title, oldBody: widget.body, oldDate: widget.date);
                     },
                   );
                 },

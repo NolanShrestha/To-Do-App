@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/widgets/CustomTaskList.dart';
+// import 'package:untitled/widgets/CustomTaskList.dart';
 import 'CustomTextField.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/models/TaskData.dart';
 
 class EditDialog extends StatefulWidget {
-  const EditDialog({super.key});
+  final String oldTitle;
+  final String oldBody;
+  final String oldDate;
+
+  const EditDialog({
+    required this.oldTitle,
+    required this.oldBody,
+    required this.oldDate,
+    super.key,
+  });
 
   @override
   State<EditDialog> createState() => _EditDialogState();
@@ -114,10 +123,12 @@ class _EditDialogState extends State<EditDialog> {
             String body = _bodyController.text;
             String date = _dateController.text;
 
-            CustomTaskList list =
-            CustomTaskList(title: title, body: body, date: date);
+            // CustomTaskList list =
+            // CustomTaskList(title: title, body: body, date: date);
+            String old = widget.oldTitle;
 
-            Provider.of<TaskData>(context, listen: false).addTask(list);
+            // Call the editTask method with old title and new values
+            Provider.of<TaskData>(context, listen: false).editTask(old, title, body, date);
             Navigator.pop(context);
           },
           child: const Text(
@@ -127,6 +138,26 @@ class _EditDialogState extends State<EditDialog> {
             ),
           ),
         ),
+
+        // TextButton(
+        //   onPressed: () {
+        //     String title = _titleController.text;
+        //     String body = _bodyController.text;
+        //     String date = _dateController.text;
+        //
+        //     CustomTaskList list =
+        //     CustomTaskList(title: title, body: body, date: date);
+        //
+        //     Provider.of<TaskData>(context, listen: false).editTask(list.title, title, body, date);
+        //     Navigator.pop(context);
+        //   },
+        //   child: const Text(
+        //     'Edit',
+        //     style: TextStyle(
+        //       color: Color(0xFFF27F01),
+        //     ),
+        //   ),
+        // ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();

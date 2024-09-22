@@ -3,7 +3,6 @@ import 'package:untitled/widgets/CustomCompleted.dart';
 import 'package:untitled/widgets/CustomAppBar.dart';
 import 'package:untitled/models/CompletedData.dart';
 import 'package:provider/provider.dart';
-import 'package:untitled/models/CompletedData.dart';
 
 class Screen3 extends StatefulWidget {
   const Screen3({super.key});

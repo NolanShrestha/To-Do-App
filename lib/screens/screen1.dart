@@ -36,7 +36,6 @@ class _Screen1State extends State<Screen1> {
   @override
   Widget build(BuildContext context) {
     var savedTasks = Provider.of<TaskData>(context).savedTasks;
-    int taskCount = Provider.of<TaskData>(context, listen: false).taskCount;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F2FF),
