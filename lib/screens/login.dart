@@ -33,6 +33,49 @@ class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  Route _createRoute1() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Register(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
+  Route _createRoute2() {
+    return PageRouteBuilder(
+      transitionDuration: Duration(milliseconds: 600),
+      pageBuilder: (context, animation, secondaryAnimation) => const Screen1(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Fade animation
+        const begin = 0.0; // Start fully transparent
+        const end = 1.0; // End fully opaque
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        // Animate the opacity
+        var opacityAnimation = animation.drive(tween);
+
+        return FadeTransition(
+          opacity: opacityAnimation,
+          child: child,
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,12 +146,10 @@ class _LoginState extends State<Login> {
                   text: 'Sign-in',
                   color: Colors.white,
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Screen1(),
-                      ),
-                    );
+                    setState(() {
+                      Navigator.of(context).push(_createRoute2())
+                      as Route<Object?>;
+                    });
                   },
                 ),
               ),
@@ -126,11 +167,10 @@ class _LoginState extends State<Login> {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Register()),
-                        );
+                        setState(() {
+                          Navigator.of(context).push(_createRoute1())
+                          as Route<Object?>;
+                        });
                       },
                       child: const Text(
                         'Sign-Up',

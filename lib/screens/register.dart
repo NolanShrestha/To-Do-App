@@ -33,6 +33,25 @@ class _RegisterState extends State<Register> {
   final TextEditingController _passwordController1 = TextEditingController();
   final TextEditingController _passwordController2 = TextEditingController();
 
+  Route _createRoute1() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Login(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(-1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween =
+        Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,12 +146,10 @@ class _RegisterState extends State<Register> {
                     color: Colors.white,
                     text: 'Register',
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Login(),
-                        ),
-                      );
+                      setState(() {
+                        Navigator.of(context).push(_createRoute1())
+                        as Route<Object?>;
+                      });
                     },
                   ),
                 ),
@@ -150,11 +167,10 @@ class _RegisterState extends State<Register> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Login()),
-                          );
+                          setState(() {
+                            Navigator.of(context).push(_createRoute1())
+                            as Route<Object?>;
+                          });
                         },
                         child: const Text(
                           'Sign-In',

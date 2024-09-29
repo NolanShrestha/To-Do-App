@@ -33,6 +33,72 @@ class Screen1 extends StatefulWidget {
 
 class _Screen1State extends State<Screen1> {
 
+  Route _createRoute1() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Login(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = 0.0; // Start with no scale
+        const end = 1.0; // End with full scale
+        const curve = Curves.ease;
+
+        // Create a Tween for scaling
+        var scaleTween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        // Animate the scale
+        var scaleAnimation = animation.drive(scaleTween);
+
+        return ScaleTransition(
+          scale: scaleAnimation,
+          child: child,
+        );
+      },
+    );
+  }
+
+  Route _createRoute2() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Screen2(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = 0.0; // Start with no scale
+        const end = 1.0; // End with full scale
+        const curve = Curves.ease;
+
+        // Create a Tween for scaling
+        var scaleTween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        // Animate the scale
+        var scaleAnimation = animation.drive(scaleTween);
+
+        return ScaleTransition(
+          scale: scaleAnimation,
+          child: child,
+        );
+      },
+    );
+  }
+
+  Route _createRoute3() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Screen3(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = 0.0; // Start with no scale
+        const end = 1.0; // End with full scale
+        const curve = Curves.ease;
+
+        // Create a Tween for scaling
+        var scaleTween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        // Animate the scale
+        var scaleAnimation = animation.drive(scaleTween);
+
+        return ScaleTransition(
+          scale: scaleAnimation,
+          child: child,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var savedTasks = Provider.of<TaskData>(context).savedTasks;
@@ -77,11 +143,8 @@ class _Screen1State extends State<Screen1> {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Login()),
-                          );
+                          Navigator.of(context).push(_createRoute1())
+                          as Route<Object?>;
                         });
                       },
                       icon: const Icon(
@@ -154,11 +217,8 @@ class _Screen1State extends State<Screen1> {
                       CustomButton(
                         onPressed: () {
                           setState(() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Screen2()),
-                            );
+                            Navigator.of(context).push(_createRoute2())
+                            as Route<Object?>;
                           });
                         },
                         backgroundColor: const Color(0xFFEDE8FF),
@@ -239,10 +299,8 @@ class _Screen1State extends State<Screen1> {
                 icon: Icons.list_alt_outlined,
                 onPressed: () {
                   setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Screen2()),
-                    );
+                    Navigator.of(context).push(_createRoute2())
+                    as Route<Object?>;
                   });
                 },
               ),
@@ -250,10 +308,8 @@ class _Screen1State extends State<Screen1> {
                 icon: Icons.checklist_outlined,
                 onPressed: () {
                   setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Screen3()),
-                    );
+                    Navigator.of(context).push(_createRoute3())
+                    as Route<Object?>;
                   });
                 },
               ),
