@@ -17,7 +17,7 @@ class CustomTaskList extends StatefulWidget {
 }
 
 class _CustomTaskListState extends State<CustomTaskList> {
-  double _progress = 0.5; // Default progress value
+  double _progress = 0.5;
 
   @override
   Widget build(BuildContext context) {

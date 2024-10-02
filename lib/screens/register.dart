@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'package:untitled/widgets/CustomTextField.dart';
 import 'package:untitled/widgets/CustomButton.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:untitled/address.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -28,10 +32,48 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController1 = TextEditingController();
-  final TextEditingController _passwordController2 = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController1 = TextEditingController();
+  final TextEditingController passwordController2 = TextEditingController();
+
+  Future<void> registerUser() async {
+    if (_formKey.currentState!.validate()) {
+      if (passwordController1.text != passwordController2.text) {
+        Fluttertoast.showToast(
+          msg: 'Passwords do not match!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+        return;
+      }
+
+      final response = await http.post(
+        Uri.parse('http://$ip:3000/auth/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'name': nameController.text,
+          'email': emailController.text,
+          'password': passwordController1.text,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Login()),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Failed to register: ${response.body}',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+      }
+    }
+  }
 
   Route _createRoute1() {
     return PageRouteBuilder(
@@ -101,40 +143,44 @@ class _RegisterState extends State<Register> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: CustomTextField(
+                    obscureText: false,
                     decoration: InputDecoration(),
                     prefixIcon: Icons.account_box,
                     hintText: 'Enter your name',
-                    controller: _nameController,
+                    controller: nameController,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: CustomTextField(
+                    obscureText: false,
                     decoration: InputDecoration(),
                     prefixIcon: Icons.mail,
                     hintText: 'Enter your email',
-                    controller: _emailController,
+                    controller: emailController,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: CustomTextField(
+                    obscureText: true,
                     decoration: InputDecoration(),
                     prefixIcon: Icons.lock,
                     hintText: 'Enter your password',
-                    controller: _passwordController1,
+                    controller: passwordController1,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: CustomTextField(
+                    obscureText: true,
                     decoration: InputDecoration(),
                     prefixIcon: Icons.lock_open_outlined,
                     hintText: 'Re-enter your password',
-                    controller: _passwordController2,
+                    controller: passwordController2,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -145,12 +191,7 @@ class _RegisterState extends State<Register> {
                     foregroundColor: Colors.white,
                     color: Colors.white,
                     text: 'Register',
-                    onPressed: () {
-                      setState(() {
-                        Navigator.of(context).push(_createRoute1())
-                        as Route<Object?>;
-                      });
-                    },
+                    onPressed: registerUser,
                   ),
                 ),
                 const SizedBox(height: 20),

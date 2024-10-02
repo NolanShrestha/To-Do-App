@@ -5,6 +5,7 @@ class CustomTextField extends StatefulWidget {
   final IconData prefixIcon; // Renamed from `icons` to `icon` for clarity
   final String hintText;
   final TextEditingController controller;
+  final bool obscureText;
 
   const CustomTextField({
     super.key,
@@ -12,17 +13,20 @@ class CustomTextField extends StatefulWidget {
     required this.prefixIcon,
     required this.hintText,
     required this.controller,
+    required this.obscureText,
   });
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
+
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
+      obscureText: widget.obscureText,
       decoration: widget.decoration.copyWith(
         hintText: widget.hintText,
         prefixIcon: Icon(
@@ -48,6 +52,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderRadius: BorderRadius.circular(12.0),
         ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Field can\'t be left empty';
+        }
+        return null;
+      },
     );
   }
 }

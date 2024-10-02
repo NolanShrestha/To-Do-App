@@ -66,6 +66,7 @@ class _EditDialogState extends State<EditDialog> {
           children: [
             const SizedBox(height: 20),
             CustomTextField(
+              obscureText: false,
               controller: _titleController,
               decoration: const InputDecoration(),
               prefixIcon: Icons.title_outlined,
@@ -73,6 +74,7 @@ class _EditDialogState extends State<EditDialog> {
             ),
             const SizedBox(height: 12),
             CustomTextField(
+              obscureText: false,
               controller: _bodyController,
               decoration: const InputDecoration(),
               prefixIcon: Icons.description_outlined,
@@ -80,6 +82,7 @@ class _EditDialogState extends State<EditDialog> {
             ),
             const SizedBox(height: 12),
             TextField(
+              obscureText: false,
               controller: _dateController,
               readOnly: true,
               decoration: InputDecoration(

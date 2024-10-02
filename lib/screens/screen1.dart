@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:untitled/screens/login.dart';
 import 'package:untitled/widgets/CustomNavBar.dart';
 import 'package:untitled/widgets/CustomButton.dart';
@@ -9,6 +8,10 @@ import 'screen2.dart';
 import 'screen3.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/models/TaskData.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:untitled/address.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,6 +35,85 @@ class Screen1 extends StatefulWidget {
 }
 
 class _Screen1State extends State<Screen1> {
+
+  String userName = '';
+  String userEmail = '';
+  int completedTasks = 0;
+  List<Map<String, dynamic>> tasks = [];
+  final storage = const FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+    fetchTasks();
+  }
+
+  Future<void> fetchUserData() async {
+    final token = await storage.read(key: 'jwt');
+
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse('http://$ip:3000/auth/me'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      setState(() {
+        userName = responseData['name'];
+        userEmail = responseData['email'];
+      });
+    } else {
+      print('Failed to fetch user data: ${response.body}');
+    }
+  }
+
+  Future<void> fetchTasks() async {
+    final token = await storage.read(key: 'jwt');
+
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse('http://$ip:3000/auth/tasks?status=0'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body) as List;
+      setState(() {
+        tasks = responseData.map((task) {
+          return {
+            'title': task['title'], // Ensure these fields exist in your API response
+            'body': task['body'],
+            'date': task['date'],
+          };
+        }).toList().cast<Map<String, dynamic>>();
+      });
+    } else {
+      print('Failed to fetch tasks: ${response.body}');
+    }
+  }
+
+  Future<void> logout() async {
+    final storage = FlutterSecureStorage();
+    await storage.delete(key: 'jwt');
+    Navigator.of(context).push(_createRoute1())
+    as Route<Object?>;
+  }
 
   Route _createRoute1() {
     return PageRouteBuilder(
@@ -119,7 +201,7 @@ class _Screen1State extends State<Screen1> {
                       backgroundImage: AssetImage('assets/logo.jpeg'),
                     ),
                     const SizedBox(width: 16),
-                    const Column(
+                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -130,7 +212,7 @@ class _Screen1State extends State<Screen1> {
                           ),
                         ),
                         Text(
-                          'Nolan',
+                          userName,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -143,8 +225,7 @@ class _Screen1State extends State<Screen1> {
                     IconButton(
                       onPressed: () {
                         setState(() {
-                          Navigator.of(context).push(_createRoute1())
-                          as Route<Object?>;
+                          logout();
                         });
                       },
                       icon: const Icon(
@@ -160,7 +241,7 @@ class _Screen1State extends State<Screen1> {
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFD8748D),
+                    color: const Color(0xFFFD8748D), // Ensure the color is correct (consider changing it if needed)
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -175,45 +256,29 @@ class _Screen1State extends State<Screen1> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Padding(
-                              padding: EdgeInsets.fromLTRB(5, 10, 0, 10),
-                              child: Text(
-                                0.1 > 0.6
-                                    ? "Hurray!\nYour today's tasks\nare almost done!"
-                                    : "Keep going!\nYou still have tasks\nto complete!",
-                                style: TextStyle(
-                                  color: Color(0xFFEDE8FF),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              padding: const EdgeInsets.fromLTRB(5, 6, 5, 6), // Adjusted side padding for consistency
+                              child: Center(
+                                child: Text(
+                                  (Provider.of<TaskData>(context).taskCount > 0)
+                                      ? "Keep going! You still have tasks\nto complete!"
+                                      : "Hurray! Your today's tasks\nare almost done!",
+                                  textAlign: TextAlign.center, // Center align the text
+                                  style: TextStyle(
+                                    color: const Color(0xFFEDE8FF),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(70, 0, 0, 0),
-                            child: CircularPercentIndicator(
-                              radius: 40.0,
-                              lineWidth: 6.0,
-                              animation: true,
-                              percent: 0.1,
-                              center: Text(
-                                "${(0.1 * 100).toStringAsFixed(0)}%",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                  color: Color(0xFFEDE8FF),
-                                ),
-                              ),
-                              circularStrokeCap: CircularStrokeCap.round,
-                              progressColor: Colors.white,
-                              backgroundColor: Colors.white.withOpacity(0.2),
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(height: 16), // Add spacing between the text and the button
                       CustomButton(
                         onPressed: () {
                           setState(() {
@@ -222,13 +287,14 @@ class _Screen1State extends State<Screen1> {
                           });
                         },
                         backgroundColor: const Color(0xFFEDE8FF),
-                        foregroundColor: Colors.white,
-                        text: 'View tasks',
+                        foregroundColor: Colors.black, // Change text color to black for better contrast
+                        text: 'View Tasks',
                         color: Colors.black,
                       ),
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 10),
                 Row(
                   children: [
